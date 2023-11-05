@@ -16,6 +16,7 @@ def main():
 	parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
 	parser.add_argument("--db"
 		, help="database file"
+		, default="test.db"
 		)
 	args = parser.parse_args()
 	#
