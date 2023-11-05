@@ -1,16 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Labels file.
+"""Label file.
 
 time spent: 🍅
 
 @author Miguel Maltez Jose
 @date 20231105
 """
+import os
 import hashlib
 import sqlite3
 import logging
 import argparse
+
+def calculate_file_md5(file):
+	return hashlib.md5(file.read()).hexdigest()
 
 def main():
 	"""There can be only one!"""
@@ -20,11 +24,12 @@ def main():
 		)
 	parser.add_argument("--db"
 		, help="database file"
-		, default="test.db"
+		, default="~/.filelabel/filelabels.db"
 		)
 	args = parser.parse_args()
+	args.db = os.path.expanduser(args.db)
 	#
-	md5 = hashlib.md5(args.file.read()).hexdigest()
+	md5 = calculate_file_md5(args.file)
 	print(md5, args.file.name)
 	with sqlite3.connect(args.db) as conn:
 		cur = conn.execute("SELECT * FROM md5_label WHERE md5=?", (md5,))
